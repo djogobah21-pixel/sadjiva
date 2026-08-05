@@ -113,11 +113,18 @@
         const tBody = document.getElementById('table-produits');
         tBody.innerHTML = "";
 
-        produits.forEach(prod => {
-          // Utilisation stricte des backticks magiques ici ``
+                produits.forEach(prod => {
+          // On nettoie le chemin pour enlever le dossier "images/" inutile sur GitHub
+          let imageChemin = prod.image.replace('Visuel ', '').replace('images/', '').trim();
+
           tBody.innerHTML += `
             <tr>
-              <td style="font-size: 24px;">${prod.image}</td>
+              <td>
+                ${imageChemin.includes('.') 
+                  ? `<img src="${imageChemin}" style="width:40px; height:40px; object-fit:contain; border-radius:4px;">` 
+                  : `<span style="font-size: 24px;">${imageChemin}</span>`
+                }
+              </td>
               <td style="font-weight: 600;">${prod.nom}</td>
               <td>${prod.categorie}</td>
               <td style="font-weight: bold; color: #4C3AFF;">${prod.prix.toLocaleString('fr-FR')} XOF</td>
