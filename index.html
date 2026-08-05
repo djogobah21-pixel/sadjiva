@@ -991,28 +991,30 @@
     }
   }
 
-  async function synchroniserAccueilAvecMySQL() {
+    async function synchroniserAccueilAvecMySQL() {
     try {
       await new Promise(resolve => setTimeout(resolve, 350));
-      const reponse = await fetch('http://localhost:5000/api/produits');
+      
+      const reponse = await fetch('https://onrender.com');
       const produits = await reponse.json();
+      
       const grille = document.getElementById('ma-grille-produits');
       if (!grille) return;
 
       grille.innerHTML = "";
 
       produits.forEach(prod => {
-        let imageChemin = prod.image.replace('Visuel ', '').trim();
+        // 1. On extrait le nom pur du fichier (ex: on transforme "images/a16.jpg" en "a16")
+        let nomFichierPur = prod.image.replace('Visuel ', '').replace('images/', '').split('.')[0].trim();
 
         grille.innerHTML += `
           <div class="ft-card" style="background:#fff; border:1px solid rgba(16,21,26,0.12); border-radius:12px; padding:16px; display:flex; flex-direction:column; gap:12px; text-align:left;">
             <div class="ft-card-art" style="height:160px; border-radius:8px; background:linear-gradient(160deg, #F6F5F1 0%, #ECEBE5 100%); display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden;">
               
-              ${imageChemin.includes('/') || imageChemin.includes('.') 
-                ? `<img src="${imageChemin}" style="width:100%; height:100%; object-fit:contain; padding:10px;" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                   <span style="display:none; font-size:12px; color:#5B6570; text-align:center; padding:10px;">📷 Photo introuvable</span>` 
-                : `<span style="font-size:48px;">${imageChemin}</span>`
-              }
+              <!-- Système de secours multi-extensions : si le .jpg échoue, le navigateur tente le .png ou le .jpeg -->
+              <img src="${nomFichierPur}.jpg" style="width:100%; height:100%; object-fit:contain; padding:10px;" 
+                   onerror="this.onerror=function(){this.onerror=function(){this.style.display='none'; this.nextElementSibling.style.display='block';}; this.src='${nomFichierPur}.png';}; this.src='${nomFichierPur}.jpg';">
+              <span style="display:none; font-size:12px; color:#5B6570; text-align:center; padding:10px;">📷 Photo introuvable</span>
 
               <div style="position:absolute; top:8px; left:8px; background:rgba(255,255,255,0.9); border-radius:5px; padding:3px 6px; font-size:10px; z-index:10; font-family:monospace;">
                 🟢 En Stock (${prod.stock})
