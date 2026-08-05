@@ -3,222 +3,146 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Federik Tech - Espace Admin Jumia</title>
+  <title>Admin - SADJIVA</title>
   <link href="https://googleapis.com" rel="stylesheet">
   <style>
-    body { font-family: 'Inter', sans-serif; background: #F1F3F1; color: #10151A; margin: 0; padding: 40px; }
+    body { font-family: 'Space Grotesk', sans-serif; background: #F6F5F1; margin: 0; padding: 40px 20px; color: #10151A; }
     .container { max-width: 1000px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-    h1 { font-family: 'Space Grotesk', sans-serif; font-size: 28px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
-    table { width: 100%; border-collapse: collapse; margin-top: 20px; text-align: left; }
-    th, td { padding: 14px; border-bottom: 1px solid rgba(16,21,26,0.12); }
-    th { background: #10151A; color: #fff; font-size: 14px; text-transform: uppercase; }
-    .btn-add { background: #4C3AFF; color: #fff; border: 0; padding: 12px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; }
-    .btn-add:hover { background: #3626CC; }
-    .badge-stock { background: #1FAA59; color: #fff; padding: 4px 8px; border-radius: 6px; font-size: 12px; }
-    .btn-delete { background: #E5484D; color: white; border: 0; padding: 6px 12px; border-radius: 6px; font-weight: 600; cursor: pointer; }
-    .btn-delete:hover { background: #CC3D42; }
-    
-    .form-box { background: #f9f9f9; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(16,21,26,0.12); display: none; }
-    .form-group { margin-bottom: 15px; display: flex; flex-direction: column; gap: 5px; }
-    .form-group input, .form-group select { padding: 10px; border-radius: 6px; border: 1px solid rgba(16,21,26,0.2); font-size: 14px; }
-    .btn-submit { background: #1FAA59; color: white; border: 0; padding: 10px 15px; border-radius: 6px; font-weight: 600; cursor: pointer; }
+    h1, h2 { font-weight: 700; margin-top: 0; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 40px; margin-top: 15px; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid rgba(16,21,26,0.08); }
+    th { background: #10151A; color: #fff; font-weight: 600; font-size: 14px; }
+    tr:hover { background: rgba(16,21,26,0.02); }
+    .btn-delete { background: #FF3B30; color: #fff; border: 0; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; }
+    .badge-stock { background: rgba(31,170,89,0.1); color: #1FAA59; padding: 4px 8px; border-radius: 6px; font-size: 13px; font-weight: 600; }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <h1>
-      📦 Gestion des Stocks - Sadjiva Shop
-      <button class="btn-add" onclick="ouvrirFormulaire()">+ Ajouter un produit</button>
-        <a href="index.html" class="btn-add" display="none">Ma Boutique</a>
-    </h1>    
-    <!-- FORMULAIRE D'AJOUT -->
-    <div class="form-box" id="form-produit">
-      <h3 style="margin-top:0; margin-bottom:15px; font-family:'Space Grotesk'">Nouveau Produit</h3>
-      <form onsubmit="ajouterProduit(event)">
-        <div class="form-group">
-          <label>Nom du produit</label>
-          <input type="text" id="p-nom" required placeholder="Ex: Samsung Galaxy S24">
-        </div>
-        <div class="form-group">
-          <label>Catégorie</label>
-          <select id="p-cat">
-            <option value="Smartphones">Smartphones</option>
-            <option value="Ordinateurs">Ordinateurs</option>
-            <option value="Consoles">Consoles</option>
-            <option value="Consoles">Imprimante</option>
-            <option value="Consoles">Accessoires</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Prix (en XOF)</label>
-          <input type="number" id="p-prix" required placeholder="Ex: 500000">
-        </div>
-        <div class="form-group">
-          <label>Visuel (Emoji)</label>
-          <input type="text" id="p-img" required placeholder="Ex: 📱 ou 💻">
-        </div>
-        <div class="form-group">
-          <label>Stock Initial</label>
-          <input type="number" id="p-stock" value="5" required>
-        </div>
-        <button type="submit" class="btn-submit">Enregistrer sur Jumia Clone</button>
-      </form>
-    </div>
+<div class="container">
+  <h1>⚙️ Tableau de Bord Gestion & Stocks</h1>
+  
+  <!-- TABLEAU DES PRODUITS EN STOCK -->
+  <h2>📦 Articles en Rayon</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Visuel</th>
+        <th>Nom du produit</th>
+        <th>Catégorie</th>
+        <th>Prix</th>
+        <th>Disponibilité</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="table-produits">
+      <!-- Injecté automatiquement -->
+    </tbody>
+  </table>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Visuel</th>
-          <th>Nom du produit</th>
-          <th>Catégorie</th>
-          <th>Prix (XOF)</th>
-          <th>Quantité</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody id="table-produits">
-        <!-- Rempli dynamiquement -->
-      </tbody>
-    </table>
-    <!-- SECTION DES COMMANDES REÇUES -->
-<h2 style="font-family: 'Space Grotesk', sans-serif; font-size: 24px; margin-top: 5px; margin-bottom: 20px;">
-  📋 Commandes Clients Reçues (Style Jumia)
-</h2>
-<table>
-  <thead>
-    <tr>
-      <th>Date</th>
-      <th>Client</th>
-      <th>Téléphone</th>
-      <th>Commune</th>
-      <th>Articles Commandés</th>
-    </tr>
-  </thead>
-  <tbody id="table-commandes">
-    <!-- Rempli automatiquement par le script -->
-  </tbody>
-</table>
-  </div>
-  <script>
-    function ouvrirFormulaire() {
-      const f = document.getElementById('form-produit');
-      f.style.display = f.style.display === 'block' ? 'none' : 'block';
+  <!-- TABLEAU DES COMMANDES CLIENTS -->
+  <h2>📋 Commandes Clients Reçues (Style Jumia)</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Client</th>
+        <th>Téléphone</th>
+        <th>Commune</th>
+        <th>Articles Commandés</th>
+      </tr>
+    </thead>
+    <tbody id="table-commandes">
+      <!-- Injecté automatiquement -->
+    </tbody>
+  </table>
+</div>
+
+<script>
+  // 1. Charger et afficher le stock des produits
+  async function chargerTableau() {
+    try {
+      const reponse = await fetch('https://onrender.com');
+      const produits = await reponse.json();
+      const tBody = document.getElementById('table-produits');
+      if (!tBody) return;
+      tBody.innerHTML = "";
+
+      produits.forEach(prod => {
+        let imageChemin = prod.image.replace('Visuel ', '').replace('images/', '').trim();
+
+        tBody.innerHTML += `
+          <tr>
+            <td>
+              ${imageChemin.includes('.') 
+                ? `<img src="${imageChemin}" style="width:40px; height:40px; object-fit:contain; border-radius:4px;">` 
+                : `<span style="font-size: 24px;">${imageChemin}</span>`
+              }
+            </td>
+            <td style="font-weight: 600;">${prod.nom}</td>
+            <td>${prod.categorie}</td>
+            <td style="font-weight: bold; color: #4C3AFF;">${prod.prix.toLocaleString('fr-FR')} XOF</td>
+            <td><span class="badge-stock">${prod.stock} en stock</span></td>
+            <td><button class="btn-delete" onclick="supprimerProduit(${prod.id})">Supprimer</button></td>
+          </tr>
+        `;
+      });
+    } catch (error) {
+      console.error("Erreur produits:", error);
     }
+  }
 
-    async function chargerTableau() {
-      try {
-        const reponse = await fetch('http://localhost:5000/api/produits');
-        const produits = await reponse.json();
-        const tBody = document.getElementById('table-produits');
-        tBody.innerHTML = "";
-
-                produits.forEach(prod => {
-          // On nettoie le chemin pour enlever le dossier "images/" inutile sur GitHub
-          let imageChemin = prod.image.replace('Visuel ', '').replace('images/', '').trim();
-
-          tBody.innerHTML += `
-            <tr>
-              <td>
-                ${imageChemin.includes('.') 
-                  ? `<img src="${imageChemin}" style="width:40px; height:40px; object-fit:contain; border-radius:4px;">` 
-                  : `<span style="font-size: 24px;">${imageChemin}</span>`
-                }
-              </td>
-              <td style="font-weight: 600;">${prod.nom}</td>
-              <td>${prod.categorie}</td>
-              <td style="font-weight: bold; color: #4C3AFF;">${prod.prix.toLocaleString('fr-FR')} XOF</td>
-              <td><span class="badge-stock">${prod.stock} en stock</span></td>
-              <td><button class="btn-delete" onclick="supprimerProduit(${prod.id})">Supprimer</button></td>
-            </tr>
-          `;
-        });
-      } catch (error) {
-        console.error("Erreur d'affichage :", error);
+  // 2. Fonction pour supprimer un produit de la base
+  async function supprimerProduit(id) {
+    if (!confirm("Voulez-vous vraiment retirer ce produit de la boutique ?")) return;
+    try {
+      const rep = await fetch(`https://onrender.com/${id}`, { method: 'DELETE' });
+      if (rep.ok) {
+        alert("Produit supprimé avec succès !");
+        chargerTableau();
       }
+    } catch (error) {
+      alert("Erreur lors de la suppression.");
     }
+  }
 
-    async function ajouterProduit(event) {
-      event.preventDefault();
-      const nouveauProd = {
-        nom: document.getElementById('p-nom').value,
-        categorie: document.getElementById('p-cat').value,
-        prix: parseInt(document.getElementById('p-prix').value),
-        image: document.getElementById('p-img').value,
-        stock: parseInt(document.getElementById('p-stock').value)
-      };
+  // 3. Charger et afficher les commandes clients reçues
+  async function chargerCommandesClient() {
+    try {
+      const reponse = await fetch('https://onrender.com');
+      const commandes = await reponse.json();
+      const tBody = document.getElementById('table-commandes');
+      if (!tBody) return;
+      tBody.innerHTML = "";
 
-      try {
-        const reponse = await fetch('http://localhost:5000/api/produits', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(nouveauProd)
-        });
+      commandes.forEach(cmd => {
+        const articles = JSON.parse(cmd.details_panier);
+        let listeArticles = articles.map(art => `${art.nom} (${art.prix.toLocaleString('fr-FR')} XOF)`).join(', ');
+        const date = new Date(cmd.date_commande).toLocaleDateString('fr-FR', { hour: '2-digit', minute: '2-digit' });
 
-        if (reponse.ok) {
-          ouvrirFormulaire();
-          chargerTableau();
-          document.getElementById('p-nom').value = "";
-        }
-      } catch (error) {
-        alert("Erreur lors de l'enregistrement");
-      }
+        tBody.innerHTML += `
+          <tr>
+            <td style="font-size: 13px; color: #5B6570;">${date}</td>
+            <td style="font-weight: 600;">${cmd.nom_client}</td>
+            <td style="font-family: monospace; font-weight: bold; color: #1FAA59;">${cmd.telephone}</td>
+            <td>📍 ${cmd.commune}</td>
+            <td style="font-size: 13px; max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${listeArticles}">
+              ${listeArticles}
+            </td>
+          </tr>
+        `;
+      });
+    } catch (error) {
+      console.error("Erreur commandes:", error);
     }
+  }
 
-    async function supprimerProduit(id) {
-      if (confirm("Voulez-vous vraiment supprimer ce produit ?")) {
-        try {
-          const reponse = await fetch(`http://localhost:5000/api/produits/${id}`, { method: 'DELETE' });
-          if (reponse.ok) {
-            chargerTableau();
-          }
-        } catch (error) {
-          alert("Erreur lors de la suppression");
-        }
-      }
-    }
+  // Lancement global au chargement
+  window.onload = function() {
+    chargerTableau();
+    chargerCommandesClient();
+  };
+</script>
 
-    window.onload = chargerTableau;
-        // Fonction pour aller chercher et afficher les commandes du serveur Node.js
-    async function chargerCommandesClient() {
-      try {
-        const reponse = await fetch('http://localhost:5000/api/commandes');
-        const commandes = await reponse.json();
-        const tBody = document.getElementById('table-commandes');
-        
-        if (!tBody) return;
-        tBody.innerHTML = ""; // Nettoyage
-
-        commandes.forEach(cmd => {
-          // On transforme le texte JSON des articles en une liste lisible
-          const articles = JSON.parse(cmd.details_panier);
-          let listeArticles = articles.map(art => `${art.nom} (${art.prix.toLocaleString('fr-FR')} XOF)`).join(', ');
-
-          // Formatage de la date
-          const date = new Date(cmd.date_commande).toLocaleDateString('fr-FR', { hour: '2-digit', minute: '2-digit' });
-
-          tBody.innerHTML += `
-            <tr>
-              <td style="font-size: 13px; color: #5B6570;">${date}</td>
-              <td style="font-weight: 600;">${cmd.nom_client}</td>
-              <td style="font-family: monospace; font-weight: bold; color: #1FAA59;">${cmd.telephone}</td>
-              <td>📍 ${cmd.commune}</td>
-              <td style="font-size: 13px; max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${listeArticles}">
-                ${listeArticles}
-              </td>
-            </tr>
-          `;
-        });
-      } catch (error) {
-        console.error("Erreur de chargement des commandes :", error);
-      }
-    }
-
-    // On modifie la ligne finale pour charger le tableau de stock ET le tableau des commandes en même temps
-    window.onload = function() {
-      chargerTableau();
-      chargerCommandesClient();
-    };
-  </script>
 </body>
 </html>
