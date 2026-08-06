@@ -823,12 +823,15 @@
       produits.forEach(prod => {
         grille.innerHTML += `
           <div class="ft-card" style="background:#fff; border:1px solid rgba(16,21,26,0.12); border-radius:12px; padding:16px; display:flex; flex-direction:column; gap:12px; text-align:left;">
-            <div class="ft-card-art" style="height:160px; border-radius:8px; background:linear-gradient(160deg, #F6F5F1 0%, #ECEBE5 100%); display:flex; align-items:center; justify-content:center; position:relative; font-size:48px;">
-              ${prod.image}
-              <div class="ft-stock-led" style="position:absolute; top:8px; left:8px; background:rgba(255,255,255,0.9); border-radius:5px; padding:3px 6px; font-size:10px; font-family:monospace; color:#5B6570;">
-                🟢 En Stock (${prod.stock})
-              </div>
-            </div>
+           <div class="ft-card-art" style="height:160px; border-radius:8px; background:linear-gradient(160deg, #F6F5F1 0%, #ECEBE5 100%); display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden;">
+            <!-- La balise IMG doit recevoir le chemin nettoyé -->
+         <img src="images/${prod.image.replace('images/', '').replace('Visuel ', '').trim()}" style="width:100%; height:100%; object-fit:contain; padding:10px;" onerror="this.src='${prod.image.replace('images/', '').replace('Visuel ', '').trim()}'">
+  
+           <div style="position:absolute; top:8px; left:8px; background:rgba(255,255,255,0.9); border-radius:5px; padding:3px 6px; font-size:10px; z-index:10; font-family:monospace;">
+          🟢 En Stock (${prod.stock})
+     </div>
+</div>
+
             <div>
               <span class="ft-card-cat" style="font-size:10px; text-transform:uppercase; color:#5B6570; font-family:monospace; display:block;">${prod.categorie}</span>
               <h3 class="ft-card-name" style="font-size:16px; margin:5px 0; font-weight:600; font-family:'Space Grotesk', sans-serif; color:#10151A;">${prod.nom}</h3>
@@ -914,10 +917,11 @@
   let monPanier = [];
 
   function ouvrirPopup() {
-    if (monPanier.length === 0) {
-      alert("Votre panier est vide ! Ajoutez des articles avant de passer commande.");
-      return;
-    }
+    // Remplacez votre condition actuelle par celle-ci pour qu'elle lise la bonne longueur :
+if (panier.length === 0) { // ou monPanier.length === 0
+    alert("Votre panier est vide ! ...");
+    return; 
+}
     document.getElementById('zone-formulaire').style.display = 'block';
     document.getElementById('zone-recu').style.display = 'none';
     const popup = document.getElementById('popup-commande');
