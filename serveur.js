@@ -6,12 +6,14 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// Connexion à la base de données XAMPP
+// Connexion à la base de données Aiven Cloud
 const db = mysql.createConnection({
-    host: '127.0.0.1',
-    user: 'root',
-    password: '',
-    database: 'federiktech_db'
+    host: '://aivencloud.com',
+    user: 'avnadmin',
+    password: 'AVNS_UnmqvG67ip2pEySZTQJ',
+    database: 'defaultdb',
+    port: 28688,
+    ssl: { rejectUnauthorized: false }
 });
 
 db.connect((err) => {
@@ -51,32 +53,21 @@ app.delete('/api/produits/:id', (req, res) => {
 });
 
 // 4. Route pour recevoir et enregistrer les commandes des clients
-// Route mise à jour : Enregistre la commande ET diminue les stocks automatiquement
 app.post('/api/commandes', (req, res) => {
     const { nom, telephone, commune, panier } = req.body;
     const sqlOrder = "INSERT INTO commandes (nom_client, telephone, commune, details_panier) VALUES (?, ?, ?, ?)";
     
-    // 1. On enregistre d'abord la commande globale
     db.query(sqlOrder, [nom, telephone, commune, JSON.stringify(panier)], (err, result) => {
-        if (err) {
-            console.error(err);
-            return res.status(500).json(err);
-        }
+        if (err) return res.status(500).json(err);
 
-        // 2. Si la commande est enregistrée, on boucle sur chaque article du panier pour baisser son stock
         if (panier && panier.length > 0) {
             let requetesTerminees = 0;
-
             panier.forEach(article => {
                 const sqlUpdateStock = "UPDATE produits SET stock = stock - 1 WHERE nom = ? AND stock > 0";
-                
                 db.query(sqlUpdateStock, [article.nom], (updateErr) => {
-                    if (updateErr) console.error("Erreur mise à jour stock pour:", article.nom);
-                    
                     requetesTerminees++;
-                    // Une fois que tous les produits du panier ont été traités, on répond au client
                     if (requetesTerminees === panier.length) {
-                        res.json({ message: "Commande validée et stocks mis à jour !", id: result.insertId });
+                        res.json({ message: "Commande validée !", id: result.insertId });
                     }
                 });
             });
@@ -85,13 +76,16 @@ app.post('/api/commandes', (req, res) => {
         }
     });
 });
-app.listen(5000, () => {
-    console.log('Serveur actif sur http://localhost:5000');
-});
+
 // Route pour afficher la liste des commandes sur l'espace d'administration
 app.get('/api/commandes', (req, res) => {
     db.query("SELECT * FROM commandes ORDER BY date_commande DESC", (err, result) => {
         if (err) return res.status(500).json(err);
         res.json(result);
     });
+});
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+    console.log(`Serveur actif sur le port ${PORT}`);
 });
