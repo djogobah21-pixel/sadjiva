@@ -6,58 +6,126 @@
   <title>Admin - SADJIVA</title>
   <link href="https://googleapis.com" rel="stylesheet">
   <style>
+    * { box-sizing: border-box; }
     body { font-family: 'Space Grotesk', sans-serif; background: #F6F5F1; margin: 0; padding: 40px 20px; color: #10151A; }
-    .container { max-width: 1000px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-    h1, h2 { font-weight: 700; margin-top: 0; }
-    table { width: 100%; border-collapse: collapse; margin-bottom: 40px; margin-top: 15px; }
-    th, td { padding: 12px; text-align: left; border-bottom: 1px solid rgba(16,21,26,0.08); }
-    th { background: #10151A; color: #fff; font-weight: 600; font-size: 14px; }
-    tr:hover { background: rgba(16,21,26,0.02); }
-    .btn-delete { background: #FF3B30; color: #fff; border: 0; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; }
-    .badge-stock { background: rgba(31,170,89,0.1); color: #1FAA59; padding: 4px 8px; border-radius: 6px; font-size: 13px; font-weight: 600; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    
+    /* En-tête de l'administration */
+    .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+    .admin-title { font-size: 28px; font-weight: 700; margin: 0; display: flex; align-items: center; gap: 10px; }
+    
+    /* Bouton pour aller sur la boutique */
+    .btn-shop { background: #10151A; color: #fff; text-decoration: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; font-size: 14px; transition: 0.2s; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(16,21,26,0.15); }
+    .btn-shop:hover { background: #4C3AFF; transform: translateY(-2px); }
+
+    /* Section blanche principale */
+    .main-box { background: #fff; padding: 35px; border-radius: 16px; box-shadow: 0 4px 20px rgba(16,21,26,0.05); margin-top: 20px; }
+    h2 { font-weight: 700; font-size: 20px; margin-top: 0; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+    
+    /* Formulaire d'ajout Jumia Premium */
+    .form-ajout { background: #FFFDF6; border: 1px solid rgba(76,58,255,0.15); padding: 25px; border-radius: 12px; margin-bottom: 40px; }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; align-items: end; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group label { font-size: 12px; font-weight: 700; text-transform: uppercase; color: #5B6570; font-family: monospace; }
+    .form-input { width: 100%; padding: 12px; border: 1px solid rgba(16,21,26,0.12); border-radius: 8px; font-size: 14px; background: #fff; font-family: inherit; transition: 0.2s; }
+    .form-input:focus { border-color: #4C3AFF; outline: none; box-shadow: 0 0 0 3px rgba(76,58,255,0.1); }
+    
+    /* Bouton Ajouter l'article */
+    .btn-add-prod { background: #4C3AFF; color: #fff; border: 0; padding: 13px; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 12px rgba(76,58,255,0.2); }
+    .btn-add-prod:hover { background: #3b2be0; transform: translateY(-1px); }
+
+    /* Tableaux au design moderne */
+    table { width: 100%; border-collapse: collapse; margin-bottom: 45px; }
+    th, td { padding: 14px; text-align: left; border-bottom: 1px solid rgba(16,21,26,0.06); font-size: 15px; }
+    th { background: #10151A; color: #fff; font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; }
+    tr:hover td { background: rgba(76,58,255,0.01); }
+    
+    /* Badges et suppressions */
+    .badge-stock { background: rgba(31,170,89,0.1); color: #1FAA59; padding: 4px 10px; border-radius: 6px; font-size: 13px; font-weight: 600; display: inline-block; }
+    .btn-delete { background: rgba(255,59,48,0.1); color: #FF3B30; border: 0; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; transition: 0.2s; }
+    .btn-delete:hover { background: #FF3B30; color: #fff; }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <h1>⚙️ Tableau de Bord Gestion & Stocks</h1>
   
-  <!-- TABLEAU DES PRODUITS EN STOCK -->
-  <h2>📦 Articles en Rayon</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Visuel</th>
-        <th>Nom du produit</th>
-        <th>Catégorie</th>
-        <th>Prix</th>
-        <th>Disponibilité</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody id="table-produits">
-      <!-- Injecté automatiquement -->
-    </tbody>
-  </table>
+  <!-- BARRE DE NAVIGATION ADMIM -->
+  <div class="admin-header">
+    <h1 class="admin-title">⚙️ Sadjiva Business</h1>
+    <!-- GROS BOUTON DE RETOUR À LA BOUTIQUE -->
+    <a href="index.html" class="btn-shop">🏪 Aller sur la boutique →</a>
+  </div>
 
-  <!-- TABLEAU DES COMMANDES CLIENTS -->
-  <h2>📋 Commandes Clients Reçues (Style Jumia)</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Date</th>
-        <th>Client</th>
-        <th>Téléphone</th>
-        <th>Commune</th>
-        <th>Articles Commandés</th>
-      </tr>
-    </thead>
-    <tbody id="table-commandes">
-      <!-- Injecté automatiquement -->
-    </tbody>
-  </table>
+  <!-- ZONE DE CONFIGURATION DES PRODUITS -->
+  <div class="form-ajout">
+    <h2>➕ Ajouter un nouvel article en rayon</h2>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Nom du produit</label>
+        <input type="text" id="add-nom" class="form-input" placeholder="Ex: iPhone 13 Pro">
+      </div>
+      <div class="form-group">
+        <label>Catégorie</label>
+        <select id="add-categorie" class="form-input">
+          <option value="SMARTPHONE">SMARTPHONE</option>
+          <option value="ORDINATEUR">ORDINATEUR</option>
+          <option value="ACCESSOIRE">ACCESSOIRE</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Prix (XOF)</label>
+        <input type="number" id="add-prix" class="form-input" placeholder="Ex: 450000">
+      </div>
+      <div class="form-group">
+        <label>Nom de la photo</label>
+        <input type="text" id="add-image" class="form-input" placeholder="Ex: iphone13.jpg">
+      </div>
+      <div class="form-group">
+        <label>Stock Initial</label>
+        <input type="number" id="add-stock" class="form-input" placeholder="Ex: 10">
+      </div>
+      <button onclick="ajouterNouveauProduit()" class="btn-add-prod">Ajouter l'article</button>
+    </div>
+  </div>
+
+  <!-- BLOC BLANC CONTENANT LES TABLEAUX -->
+  <div class="main-box">
+    <h2>📦 Articles actuellement en Rayon</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Visuel</th>
+          <th>Nom du produit</th>
+          <th>Catégorie</th>
+          <th>Prix</th>
+          <th>Disponibilité</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="table-produits"></tbody>
+        <!-- Injecté automatiquement -->
+      </tbody>
+    </table>
+
+    <h2>📋 Commandes Clients Reçues (Style Jumia)</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Client</th>
+          <th>Téléphone</th>
+          <th>Commune</th>
+          <th>Articles Commandés</th>
+        </tr>
+      </thead>
+      <tbody id="table-commandes"></tbody>
+        <!-- Injecté automatiquement -->
+      </tbody>
+    </table>
+  </div>
+
 </div>
-
 <script>
   // 1. Charger et afficher le stock des produits
   async function chargerTableau() {
@@ -142,6 +210,45 @@
     chargerTableau();
     chargerCommandesClient();
   };
+  async function ajouterNouveauProduit() {
+  const nom = document.getElementById('add-nom').value.trim();
+  const categorie = document.getElementById('add-categorie').value;
+  const prix = parseInt(document.getElementById('add-prix').value);
+  const image = document.getElementById('add-image').value.trim();
+  const stock = parseInt(document.getElementById('add-stock').value);
+
+  // Sécurité : Vérifier que les cases importantes ne sont pas vides
+  if (!nom || !prix || !image || isNaN(stock)) {
+    alert("Veuillez remplir correctement toutes les cases avant de valider !");
+    return;
+  }
+
+  try {
+    const reponse = await fetch('http://localhost:5000/api/produits', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nom, categorie, prix, image, stock })
+    });
+
+    if (reponse.ok) {
+      alert(`L'article "${nom}" a bien été ajouté au rayon !`);
+      
+      // Vider automatiquement les cases du formulaire après l'ajout
+      document.getElementById('add-nom').value = "";
+      document.getElementById('add-prix').value = "";
+      document.getElementById('add-image').value = "";
+      document.getElementById('add-stock').value = "";
+      
+      // Recharger instantanément les tableaux à l'écran
+      chargerDonnies(); 
+    } else {
+      alert("Le serveur XAMPP a renvoyé une erreur.");
+    }
+  } catch (error) {
+    console.error("Erreur d'ajout :", error);
+    alert("Impossible de joindre le serveur local. Vérifiez que votre terminal affiche bien 'Serveur local démarré'.");
+  }
+}
 </script>
 
 </body>
